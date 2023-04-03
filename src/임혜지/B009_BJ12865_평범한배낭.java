@@ -18,7 +18,7 @@ public class B009_BJ12865_평범한배낭 {
 		n = Integer.parseInt(st.nextToken());// 물건 개수 입력
 		k = Integer.parseInt(st.nextToken());// 무게 제한 입력
 
-		w = new int[n]; // 무게 배열 생성
+		w = new int[n + 1]; // 무게 배열 생성
 		v = new int[n + 1]; // 가치 배열 생성(dp를 위해 사이즈+1)
 		dp = new int[n + 1][k + 1];// dp 배열 생성(사이즈+1)
 
