@@ -12,8 +12,8 @@ public class B020_SWEA_키순서_과제5 {
 	static int t;// 테스트 케이스 수
 	static int n, m;// 노드 번호 개수, 비교 횟수
 	static ArrayList<Integer> adj[];// 인접리스트
-	static int a[];// 진출차수 셀 배열
-	static int b[];// 진입차수 셀 배열
+	static int a[];// 진출 노드수 셀 배열
+	static int b[];// 진입 노드수 셀 배열
 	static StringBuilder str = new StringBuilder();// 결과로 출력할 문자열
 
 	public static void main(String[] args) throws NumberFormatException, IOException {
@@ -28,8 +28,8 @@ public class B020_SWEA_키순서_과제5 {
 			for (int i = 0; i <= n; i++) {
 				adj[i] = new ArrayList<>();// 인접리스트 각각 초기화
 			}
-			a = new int[n + 1];// 진출차수 배열 초기화
-			b = new int[n + 1];// 진입차수 배열 초기화
+			a = new int[n + 1];// 진출 노드수 배열 초기화
+			b = new int[n + 1];// 진입 노드수 배열 초기화
 
 			for (int i = 0; i < m; i++) {
 				st = new StringTokenizer(in.readLine());// 한 줄 입력
@@ -37,11 +37,11 @@ public class B020_SWEA_키순서_과제5 {
 				int to = Integer.parseInt(st.nextToken());// 도착정점
 				adj[from].add(to);// 인접리스트에 추가(방향 존재)
 			}
-			sol();// 차수 세는 메소드
+			sol();//  노드수 세는 메소드
 
 			int cnt = 0;// 등수를 알 수 있는 학생 수 카운트 위한 벼누
 			for (int i = 1; i <= n; i++) {
-				if ((a[i] - 1) + b[i] == n - 1) {// 진출차수와 진입차수를 더한 것이 n-1이면
+				if ((a[i] - 1) + b[i] == n - 1) {// 진출 노드수와 진입 노드수를 더한 것이 n-1이면
 					cnt++;// 등수를 알 수 있음
 				}
 			}
@@ -60,10 +60,10 @@ public class B020_SWEA_키순서_과제5 {
 
 			while (!q.isEmpty()) {
 				int cur = q.poll();
-				a[i]++;// 진출차수 1 증가(단, 자기 자신이 포함되는 것도 고려)
+				a[i]++;// 진출 노드수 1 증가(단, 자기 자신이 포함되는 것도 고려)
 				for (int v : adj[cur]) {// 인접한 정점에 대해
 					if (!visit[v]) {// 탐색하지 않은 정점은
-						b[v]++;// 진입차수 1 증가
+						b[v]++;// 진입 노드수 1 증가
 						q.add(v);// 인접 정점을 큐에 추가하고
 						visit[v] = true;// 방문 체크
 					}
