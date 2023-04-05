@@ -28,7 +28,7 @@ public class B021_SWEA4014_활주로_건설 {
                     map[i][j] = Integer.parseInt(st.nextToken());
                 }
             }
-중
+
 
 
         }
