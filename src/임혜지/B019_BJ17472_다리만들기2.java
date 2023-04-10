@@ -5,25 +5,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
-/*
- * 1 땅, 0 바다
- * 
- * 다리방향이 일정(같은 열 또는 같은 행)
- * 다리길이가 2 이상
- */
-/*
- * 1을 발견하면 상/하/좌/우 중 한방향으로 쭉 나아가기(길이 세기)
- * -> 0이었다가 1을 발견하면 완료(단, 길이 1이면 리턴) -> 완료하면 연결된 섬들을 모두 -1로 바꿔주기
- * -> 인덱스 아웃이면 리턴
- * 
- * --> 1이 더이상 없을 때까지 위 과정 반복
- * --> 
- */
 public class B019_BJ17472_다리만들기2 {
 	static int n, m;
 	static int[][] map;
@@ -57,8 +44,8 @@ public class B019_BJ17472_다리만들기2 {
 	}
 
 	static int cntC;
-	// static ArrayList<Bridge> list;
 	static PriorityQueue<Bridge> pq;
+	static int res;
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
@@ -80,14 +67,11 @@ public class B019_BJ17472_다리만들기2 {
 			for (int j = 0; j < m; j++) {
 				if (map[i][j] == 1) {
 					naming(i, j);
-					// print();
 					cntC++;
 					idx--;
 				}
 			}
 		}
-
-		// list=new ArrayList<>();
 		pq = new PriorityQueue<>();
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < m; j++) {
@@ -96,15 +80,18 @@ public class B019_BJ17472_다리만들기2 {
 				}
 			}
 		}
-		for (Bridge b : pq) {
-			System.out.println(b.fromName + " , " + b.toName + " , " + b.len);
+		for (Bridge cur : pq) {
+			System.out.println(cur.fromName + " , " + cur.toName + " , " + cur.len);
 		}
 
 		parent = new int[cntC + 1];
 		for (int i = 1; i < parent.length; i++) {
 			parent[i] = i;
 		}
-		// sol();
+		
+		res=0;
+		sol();
+		System.out.println(res);
 	}
 
 	static int idx = -1;
@@ -162,8 +149,10 @@ public class B019_BJ17472_다리만들기2 {
 
 			if (cnt != 0) {
 				// list.add(new Bridge(name,map[newR][newC],cnt));
-				System.out.println(row + " , " + col + "일 때 방향 " + dir);
-				pq.add(new Bridge(name, map[newR][newC], cnt));
+				//System.out.println(row + " , " + col + "일 때 방향 " + dir);
+				if (check(name, map[newR][newC], cnt)) {
+					pq.add(new Bridge(name, map[newR][newC], cnt));
+				}
 			}
 		}
 	}
@@ -200,8 +189,31 @@ public class B019_BJ17472_다리만들기2 {
 		System.out.println();
 	}
 
+	static boolean check(int from, int to, int len) {
+		for (Bridge cur : pq) {
+			if ((cur.fromName == from && cur.toName == to && cur.len == len)
+					|| (cur.fromName == to && cur.toName == from && cur.len == len)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	static void sol() {
-		// union find
-		
+		int size=pq.size();
+		for(int i=0;i<size;i++) {
+			Bridge cur=pq.poll();
+			if(find(-1*cur.fromName)!=find(-1*cur.toName)){
+				union(-1*cur.fromName,-1*cur.toName);
+				res+=cur.len;
+			}
+		}
+		int par=parent[1];
+		for(int i=2;i<=parent.length;i++) {
+			if(par!=parent[i]) {
+				res=-1;
+				return;
+			}
+		}
 	}
 }
